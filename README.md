@@ -16,7 +16,7 @@ This project was developed using **Python** as the core language, **Tkinter** fo
 
 | Layer | Technology |
 |---|---|
-| Language | Python 3.x |
+| Language | Python 3 |
 | Frontend (GUI) | Tkinter (Python Standard Library) |
 | Backend / Database | MySQL |
 | Database Connector | mysql-connector-python |
@@ -83,18 +83,37 @@ AMS_Project/
 
 ## Database Schema
 
-### students Table
+### Teacher Table
 ```sql
-CREATE TABLE students (
-    student_id   INT PRIMARY KEY AUTO_INCREMENT,
-    name         VARCHAR(100) NOT NULL,
-    roll_no      VARCHAR(20) UNIQUE NOT NULL,
-    class        VARCHAR(50),
-    email        VARCHAR(100)
+CREATE TABLE IF NOT EXISTS teachers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    password VARCHAR(250) NOT NULL,
+    subject VARCHAR(100),
+    blood_group VARCHAR(5)   DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-### attendance Table
+### Students Table
+```sql
+CREATE TABLE IF NOT EXISTS students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    roll_no VARCHAR(20) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(250) NOT NULL,
+    class VARCHAR(50),
+    dob varchar(20) NOT NULL,
+    phone varchar(15) NOT NULL,
+    blood_group varchar(5) NOT NULL,
+    face_encoding LONGBLOB,
+    qr_code_path VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Attendance Table
 ```sql
 CREATE TABLE attendance (
     id           INT PRIMARY KEY AUTO_INCREMENT,
@@ -106,13 +125,16 @@ CREATE TABLE attendance (
 );
 ```
 
-### users Table
+### Active Classes
 ```sql
-CREATE TABLE users (
-    user_id      INT PRIMARY KEY AUTO_INCREMENT,
-    username     VARCHAR(50) UNIQUE NOT NULL,
-    password     VARCHAR(100) NOT NULL,
-    role         VARCHAR(20) DEFAULT 'teacher'
+CREATE TABLE active_classes (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  teacher_id  INT          NOT NULL,
+  subject     VARCHAR(100) NOT NULL,
+  start_time  DATETIME     DEFAULT NOW(),
+  active      TINYINT(1)   DEFAULT 1,
+  UNIQUE KEY uniq_teacher (teacher_id),
+  FOREIGN KEY (teacher_id) REFERENCES teachers(id)
 );
 ```
 
@@ -122,17 +144,22 @@ CREATE TABLE users (
 
 The `db/db_connection.py` file handles all MySQL connectivity using `mysql-connector-python`:
 
-```python
+```
+python
 import mysql.connector
 
 def get_connection():
-    conn = mysql.connector.connect(
-        host="localhost",
-        user="your_username",
-        password="your_password",
-        database="ams_db"
-    )
-    return conn
+    try:
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Your_root_Password",   # Your MYSQL root password
+            database="ams_db"
+        )
+        return conn
+    except mysql.connector.Error as e:
+        print(f"DB Connection Error: {e}")
+        return None
 ```
 
 ---
@@ -227,9 +254,9 @@ python main.py
 
 ## Developed By
 
-**MD Ansari**
-B.Tech (CSE) — Lateral Entry, 4th Semester
-Engineering College, Jharkhand, India
+**Md Shahnawaz Ansari & Team**
+B.Tech (CSE) — 2024-28 , 4th Semester
+Chaibasa Engineering College, Chaibasa, Jharkhand, India
 
 ---
 
