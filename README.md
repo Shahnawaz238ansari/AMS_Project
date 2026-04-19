@@ -52,31 +52,35 @@ This project was developed using **Python** as the core language, **Tkinter** fo
 ## Project Structure
 
 ```
-AMS_Project/
+AMS/                              ← project root (run everything from here)
+├── main.py                       ← entry point
+├── login_window.py               ← student & teacher login (eye-toggle added)
+├── registration_window.py        ← student & teacher registration
+├── student_dashboard.py          ← student view (QR display, attendance history)
+├── teacher_dashboard.py          ← teacher view (class control, reports, CSV export)
+├── theme.py                      ← dark / light palette (DARK / LIGHT dicts)
+├── connection.py                 ← MySQL connection factory  ← edit password here
+├── qr-attendence.py              ← standalone QR CLI tool (optional)
+├── collect_faces.py              ← webcam face-capture script
+├── face_recognition_module.py    ← LBPH inference session
+├── train_model.py                ← trains the LBPH model on dataset/
+├── __init__.py                   ← marks root as a Python package
 │
-├── main.py                     # Entry point — launches the application
-├── login.py                    # Login window and authentication logic
-├── dashboard.py                # Main dashboard after login
+├── face_module/                  ← face pipeline assets
+│   ├── __init__.py
+│   ├── dataset/                  ← per-student image folders  (auto-created)
+│   │   └── <roll_no>/
+│   │       ├── 1.jpg
+│   │       └── ...
+│   ├── trainer/                  ← saved LBPH model          (auto-created)
+│   │   ├── face_model.yml
+│   │   └── label_map.pkl
+│   └── haarcascade_frontalface_default.xml
 │
-├── student/
-│   ├── add_student.py          # Add new student form
-│   ├── update_student.py       # Update student details
-│   └── view_student.py         # View all students in Treeview table
-│
-├── attendance/
-│   ├── mark_attendance.py      # Mark attendance UI
-│   └── view_attendance.py      # View attendance records
-│
-├── report/
-│   └── attendance_report.py    # Generate attendance summary/report
-│
-├── db/
-│   └── db_connection.py        # MySQL connection handler using mysql-connector-python
-│
-├── database/
-│   └── ams_db.sql              # SQL script to create database and tables
-│
-└── README.md
+└── assets/
+    └── qrcodes/                  ← student QR images         (auto-created)
+        └── <roll_no>.png
+
 ```
 
 ---
