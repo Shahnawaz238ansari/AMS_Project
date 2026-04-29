@@ -5,9 +5,9 @@ USE ams_db;
 CREATE TABLE IF NOT EXISTS teachers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
+	email VARCHAR(100) NOT NULL,
     password VARCHAR(250) NOT NULL,
     subject VARCHAR(100),
-    blood_group VARCHAR(5)   DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
